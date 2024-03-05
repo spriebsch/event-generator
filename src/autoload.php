@@ -281,6 +281,7 @@ spl_autoload_register(
                 'spriebsch\\eventstore\\generator\\abstractproperty' => '/AbstractProperty.php',
                 'spriebsch\\eventstore\\generator\\arrayproperty' => '/properties/ArrayProperty.php',
                 'spriebsch\\eventstore\\generator\\boolproperty' => '/properties/BoolProperty.php',
+                'spriebsch\\eventstore\\generator\\enumproperty' => '/properties/EnumProperty.php',
                 'spriebsch\\eventstore\\generator\\eventgenerator' => '/EventGenerator.php',
                 'spriebsch\\eventstore\\generator\\eventgeneratorexception' => '/EventGeneratorException.php',
                 'spriebsch\\eventstore\\generator\\eventspecification' => '/EventSpecification.php',

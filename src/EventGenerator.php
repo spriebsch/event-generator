@@ -511,15 +511,32 @@ final class EventGenerator
                     )
                 );
             } else {
-                $arguments[] = new Arg(
-                    $this->builderFactory->methodCall(
-                        new Expr\Variable('json'),
-                        'get',
-                        [
-                            new String_($property->name())
-                        ]
-                    )
-                );
+                if ($property->isEnum()) {
+                    $arguments[] = new Arg(
+                        new Expr\StaticCall(
+                            new Name($property->type()), $this->constructorNameOf($property->type()),
+                            [
+                                $this->builderFactory->methodCall(
+                                    new Expr\Variable('json'),
+                                    'get',
+                                    [
+                                        new String_($property->name())
+                                    ]
+                                )
+                            ]
+                        )
+                    );
+                } else {
+                    $arguments[] = new Arg(
+                        $this->builderFactory->methodCall(
+                            new Expr\Variable('json'),
+                            'get',
+                            [
+                                new String_($property->name())
+                            ]
+                        )
+                    );
+                }
             }
         }
 
@@ -545,10 +562,19 @@ final class EventGenerator
                     new String_($property->name())
                 );
             } else {
-                $values[] = new ArrayItem(
-                    new PropertyFetch(new Variable('this'), $property->name()),
-                    new String_($property->name())
-                );
+                if ($property->isEnum()) {
+                    $values[] = new ArrayItem(
+                        $this->builderFactory->propertyFetch(
+                            new PropertyFetch(new Variable('this'), $property->name()), 'value'
+                        ),
+                        new String_($property->name())
+                    );
+                } else {
+                    $values[] = new ArrayItem(
+                        new PropertyFetch(new Variable('this'), $property->name()),
+                        new String_($property->name())
+                    );
+                }
             }
         }
 

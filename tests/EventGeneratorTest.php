@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace spriebsch\eventstore\generator;
 
@@ -20,6 +18,7 @@ use spriebsch\uuid\UUID;
 #[CoversClass(Specification::class)]
 #[CoversClass(AbstractProperty::class)]
 #[CoversClass(ValueObjectProperty::class)]
+#[CoversClass(EnumProperty::class)]
 #[CoversClass(ArrayProperty::class)]
 #[CoversClass(BoolProperty::class)]
 #[CoversClass(Specification::class)]
@@ -310,6 +309,40 @@ class EventGeneratorTest extends TestCase
 
         $this->assertEventWorksAsExpected($event);
         $this->assertSame($value->asString(), $event->theProperty()->asString());
+    }
+
+    #[Group('feature')]
+    public function test_generates_event_with_enum_property(): void
+    {
+        $targetDirectory = new FakeDirectory('the-target-directory');
+        $namespace = 'spriebsch\\eventgenerator\\tests\\' . __FUNCTION__;
+        $class = $namespace . '\\TestEvent';
+
+        $value = TestEnum::from('A');
+
+        $eventGenerator = new EventGenerator($targetDirectory, $namespace, []);
+
+        $eventGenerator->generateEvent(
+            'the-topic',
+            'TestEvent',
+            [
+                EnumProperty::withName('theProperty')->withEnum(TestEnum::class)
+            ],
+            TestMappedCorrelationId::class,
+            null
+        );
+
+        $code = $targetDirectory->allFiles()[0]->load();
+
+        eval(substr($code, strlen('<?php')));
+
+        $event = $class::from(
+            TestMappedCorrelationId::generate(),
+            $value
+        );
+
+        $this->assertEventWorksAsExpected($event);
+        $this->assertSame($value->value, $event->theProperty()->value);
     }
 
     #[Group('feature')]

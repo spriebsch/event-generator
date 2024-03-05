@@ -9,6 +9,7 @@ spl_autoload_register(
             $classes = array(
                 'spriebsch\\eventstore\\generator\\eventgeneratortest' => '/EventGeneratorTest.php',
                 'spriebsch\\eventstore\\generator\\testcorrelationid' => '/stubs/TestCorrelationId.php',
+                'spriebsch\\eventstore\\generator\\testenum' => '/stubs/TestEnum.php',
                 'spriebsch\\eventstore\\generator\\testfixedcorrelationid' => '/stubs/TestFixedCorrelationId.php',
                 'spriebsch\\eventstore\\generator\\testmappedcorrelationid' => '/stubs/TestMappedCorrelationId.php',
                 'spriebsch\\eventstore\\generator\\testvalueobject' => '/stubs/TestValueObject.php',

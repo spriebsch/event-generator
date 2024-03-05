@@ -33,4 +33,9 @@ abstract class AbstractProperty implements Property
     {
         return false;
     }
+
+    public function isEnum(): bool
+    {
+        return false;
+    }
 }
