@@ -7,6 +7,7 @@ spl_autoload_register(
         static $classes = null;
         if ($classes === null) {
             $classes = array(
+                'spriebsch\\eventstore\\generator\\enumpropertytest' => '/EnumPropertyTest.php',
                 'spriebsch\\eventstore\\generator\\eventgeneratortest' => '/EventGeneratorTest.php',
                 'spriebsch\\eventstore\\generator\\testcorrelationid' => '/stubs/TestCorrelationId.php',
                 'spriebsch\\eventstore\\generator\\testenum' => '/stubs/TestEnum.php',
@@ -16,7 +17,8 @@ spl_autoload_register(
                 'spriebsch\\eventstore\\generator\\testvalueobjectwithnamedconstructor' => '/stubs/TestValueObjectWithNamedConstructor.php',
                 'spriebsch\\eventstore\\generator\\testvalueobjectwithnonpublicnamedconstructor' => '/stubs/TestValueObjectWithNonPublicNamedConstructor.php',
                 'spriebsch\\eventstore\\generator\\testvalueobjectwithnonstaticnamedconstructor' => '/stubs/TestValueObjectWithNonStaticNamedConstructor.php',
-                'spriebsch\\eventstore\\generator\\testvalueobjectwithparameterlessnamedconstructor' => '/stubs/TestValueObjectWithParameterlessNamedConstructor.php'
+                'spriebsch\\eventstore\\generator\\testvalueobjectwithparameterlessnamedconstructor' => '/stubs/TestValueObjectWithParameterlessNamedConstructor.php',
+                'spriebsch\\eventstore\\generator\\valueobjectpropertytest' => '/ValueObjectPropertyTest.php'
             );
         }
         $cn = strtolower($class);
