@@ -29,7 +29,7 @@
   "require": {
     "php": "^8.3",
     "ext-sqlite3": "*",
-    "nikic/php-parser": "^4.15",
+    "nikic/php-parser": "^5.0",
     "spriebsch/eventstore": "^1.0",
     "spriebsch/filesystem": "^1.0",
     "spriebsch/sqlite": "^1.0",
@@ -39,7 +39,7 @@
   "scripts": {
     "post-autoload-dump": "composer generate-autoloader",
     "generate-autoloader": [
-      "tools/phpab --basedir src --output src/autoload.php composer.json",
+      "tools/phpab --tolerant --basedir src --output src/autoload.php composer.json",
       "tools/phpab --output tests/autoload.php tests"
     ],
     "clean": "rm -rf build/*",
