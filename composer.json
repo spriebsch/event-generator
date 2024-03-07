@@ -59,6 +59,10 @@
       "tools/phpunit --coverage-html build/code-coverage --path-coverage"
     ],
     "show-coverage": "gio open build/code-coverage/index.html",
-    "update-tools": "phive update"
+    "update-tools": [
+      "rm tools/phpunit.phar",
+      "phive update",
+      "ln -s phpunit tools/phpunit.phar"
+    ]
   }
 }
