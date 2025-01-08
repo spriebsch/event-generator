@@ -312,6 +312,40 @@ class EventGeneratorTest extends TestCase
     }
 
     #[Group('feature')]
+    public function test_generates_event_with_int_value_object_property(): void
+    {
+        $targetDirectory = new FakeDirectory('the-target-directory');
+        $namespace = 'spriebsch\\eventgenerator\\tests\\' . __FUNCTION__;
+        $class = $namespace . '\\TestEvent';
+
+        $value = TestIntegerValueObject::from(42);
+
+        $eventGenerator = new EventGenerator($targetDirectory, $namespace, []);
+
+        $eventGenerator->generateEvent(
+            'the-topic',
+            'TestEvent',
+            [
+                ValueObjectProperty::withName('theProperty')->withClass(TestIntegerValueObject::class)
+            ],
+            TestMappedCorrelationId::class,
+            null
+        );
+
+        $code = $targetDirectory->allFiles()[0]->load();
+
+        eval(substr($code, strlen('<?php')));
+
+        $event = $class::from(
+            TestMappedCorrelationId::generate(),
+            $value
+        );
+
+        $this->assertEventWorksAsExpected($event);
+        $this->assertSame($value->asInt(), $event->theProperty()->asInt());
+    }
+
+    #[Group('feature')]
     public function test_generates_event_with_enum_property(): void
     {
         $targetDirectory = new FakeDirectory('the-target-directory');

@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "nikic/php-parser",
-            "version": "v5.0.2",
+            "version": "v5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "139676794dc1e9231bf7bcd123cfc0c99182cb13"
+                "reference": "447a020a1f875a434d62f2a401f53b82a396e494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/139676794dc1e9231bf7bcd123cfc0c99182cb13",
-                "reference": "139676794dc1e9231bf7bcd123cfc0c99182cb13",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/447a020a1f875a434d62f2a401f53b82a396e494",
+                "reference": "447a020a1f875a434d62f2a401f53b82a396e494",
                 "shasum": ""
             },
             "require": {
@@ -28,7 +28,7 @@
             },
             "require-dev": {
                 "ircmaxell/php-yacc": "^0.0.7",
-                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
+                "phpunit/phpunit": "^9.0"
             },
             "bin": [
                 "bin/php-parse"
@@ -60,22 +60,22 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.2"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.4.0"
             },
-            "time": "2024-03-05T20:51:40+00:00"
+            "time": "2024-12-30T11:07:19+00:00"
         },
         {
             "name": "spriebsch/eventstore",
-            "version": "1.1.2",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spriebsch/eventstore.git",
-                "reference": "1ce3365b64806087c6850f5e61d28578aa0f3c80"
+                "reference": "ee04d3c3d657c300d417497332b7a6bf7b2f480e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spriebsch/eventstore/zipball/1ce3365b64806087c6850f5e61d28578aa0f3c80",
-                "reference": "1ce3365b64806087c6850f5e61d28578aa0f3c80",
+                "url": "https://api.github.com/repos/spriebsch/eventstore/zipball/ee04d3c3d657c300d417497332b7a6bf7b2f480e",
+                "reference": "ee04d3c3d657c300d417497332b7a6bf7b2f480e",
                 "shasum": ""
             },
             "require": {
@@ -84,6 +84,9 @@
                 "spriebsch/sqlite": "^1.0",
                 "spriebsch/timestamp": "^1.0",
                 "spriebsch/uuid": "^1.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.0"
             },
             "type": "library",
             "autoload": {
@@ -106,22 +109,22 @@
             "description": "Lightweight Sqlite-based Event Store.",
             "support": {
                 "issues": "https://github.com/spriebsch/eventstore/issues",
-                "source": "https://github.com/spriebsch/eventstore/tree/1.1.2"
+                "source": "https://github.com/spriebsch/eventstore/tree/1.8.0"
             },
-            "time": "2024-03-07T04:11:45+00:00"
+            "time": "2025-01-08T08:09:17+00:00"
         },
         {
             "name": "spriebsch/filesystem",
-            "version": "1.0.1",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spriebsch/filesystem.git",
-                "reference": "a684ba9cdcfc9ee7848fc6e941b0381de70876f8"
+                "reference": "a888f2797039245dfc06638aadf443e9f4fe2404"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spriebsch/filesystem/zipball/a684ba9cdcfc9ee7848fc6e941b0381de70876f8",
-                "reference": "a684ba9cdcfc9ee7848fc6e941b0381de70876f8",
+                "url": "https://api.github.com/repos/spriebsch/filesystem/zipball/a888f2797039245dfc06638aadf443e9f4fe2404",
+                "reference": "a888f2797039245dfc06638aadf443e9f4fe2404",
                 "shasum": ""
             },
             "require": {
@@ -149,22 +152,22 @@
             "description": "Lightweight object-oriented API to the filesystem.",
             "support": {
                 "issues": "https://github.com/spriebsch/filesystem/issues",
-                "source": "https://github.com/spriebsch/filesystem/tree/1.0.1"
+                "source": "https://github.com/spriebsch/filesystem/tree/1.0.6"
             },
-            "time": "2024-03-01T17:16:51+00:00"
+            "time": "2024-10-23T21:23:35+00:00"
         },
         {
             "name": "spriebsch/sqlite",
-            "version": "1.0.2",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spriebsch/sqlite.git",
-                "reference": "dc5880768689c5e43f1add50f1b49e1c0ab458e9"
+                "reference": "a3de11bf564020cc2e9746179cc4c386b6e9573f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spriebsch/sqlite/zipball/dc5880768689c5e43f1add50f1b49e1c0ab458e9",
-                "reference": "dc5880768689c5e43f1add50f1b49e1c0ab458e9",
+                "url": "https://api.github.com/repos/spriebsch/sqlite/zipball/a3de11bf564020cc2e9746179cc4c386b6e9573f",
+                "reference": "a3de11bf564020cc2e9746179cc4c386b6e9573f",
                 "shasum": ""
             },
             "require": {
@@ -192,22 +195,22 @@
             "description": "Lightweight Sqlite wrapper with lazy connection and schema creation.",
             "support": {
                 "issues": "https://github.com/spriebsch/sqlite/issues",
-                "source": "https://github.com/spriebsch/sqlite/tree/1.0.2"
+                "source": "https://github.com/spriebsch/sqlite/tree/1.0.7"
             },
-            "time": "2024-03-01T17:17:51+00:00"
+            "time": "2024-09-09T20:58:52+00:00"
         },
         {
             "name": "spriebsch/timestamp",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spriebsch/timestamp.git",
-                "reference": "59a74d63533478c763ad155ff9781ce0a38acb96"
+                "reference": "475363a8ce010b4318b9418942182f13143da238"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spriebsch/timestamp/zipball/59a74d63533478c763ad155ff9781ce0a38acb96",
-                "reference": "59a74d63533478c763ad155ff9781ce0a38acb96",
+                "url": "https://api.github.com/repos/spriebsch/timestamp/zipball/475363a8ce010b4318b9418942182f13143da238",
+                "reference": "475363a8ce010b4318b9418942182f13143da238",
                 "shasum": ""
             },
             "require": {
@@ -234,22 +237,22 @@
             "description": "A timestamp with microsecond granularity.",
             "support": {
                 "issues": "https://github.com/spriebsch/timestamp/issues",
-                "source": "https://github.com/spriebsch/timestamp/tree/1.0.0"
+                "source": "https://github.com/spriebsch/timestamp/tree/1.0.2"
             },
-            "time": "2024-01-29T20:56:10+00:00"
+            "time": "2024-09-09T20:59:20+00:00"
         },
         {
             "name": "spriebsch/uuid",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spriebsch/UUID.git",
-                "reference": "8cb0e404094ff9651b525e5b544c4616441c8e75"
+                "reference": "75325ce64ef16a005cbb9cd63d6d5c1a389b95f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spriebsch/UUID/zipball/8cb0e404094ff9651b525e5b544c4616441c8e75",
-                "reference": "8cb0e404094ff9651b525e5b544c4616441c8e75",
+                "url": "https://api.github.com/repos/spriebsch/UUID/zipball/75325ce64ef16a005cbb9cd63d6d5c1a389b95f8",
+                "reference": "75325ce64ef16a005cbb9cd63d6d5c1a389b95f8",
                 "shasum": ""
             },
             "require": {
@@ -276,22 +279,22 @@
             "description": "A fast and simple no-frills UUIDv4 implementation.",
             "support": {
                 "issues": "https://github.com/spriebsch/UUID/issues",
-                "source": "https://github.com/spriebsch/UUID/tree/1.0.2"
+                "source": "https://github.com/spriebsch/UUID/tree/1.0.3"
             },
-            "time": "2024-03-01T17:13:59+00:00"
+            "time": "2024-09-09T20:59:41+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.3",
         "ext-sqlite3": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.3"
     },

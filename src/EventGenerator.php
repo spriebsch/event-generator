@@ -14,8 +14,8 @@ use PhpParser\Builder\Class_;
 use PhpParser\Builder\Method;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
@@ -31,7 +31,6 @@ use spriebsch\eventstore\Json;
 use spriebsch\eventstore\SerializableEventTrait;
 use spriebsch\filesystem\Directory;
 use spriebsch\timestamp\Timestamp;
-use spriebsch\uuid\UUID;
 
 final class EventGenerator
 {
@@ -496,20 +495,40 @@ final class EventGenerator
 
         foreach ($properties as $property) {
             if ($property->isValueObject()) {
-                $arguments[] = new Arg(
-                    new Expr\StaticCall(
-                        new Name($property->type()), $this->constructorNameOf($property->type()),
-                        [
-                            $this->builderFactory->methodCall(
-                                new Expr\Variable('json'),
-                                'get',
-                                [
-                                    new String_($property->name())
-                                ]
-                            )
-                        ]
-                    )
-                );
+                $rc = new ReflectionClass($property->type());
+                $rm = $rc->getMethod($this->constructorNameOf($property->type()));
+                $rp = $rm->getParameters()[0];
+                if ($rp->getType()->getName() === 'int') {
+                    $arguments[] = new Arg(
+                        new Expr\StaticCall(
+                            new Name($property->type()), $this->constructorNameOf($property->type()),
+                            [
+                                $this->builderFactory->methodCall(
+                                    new Expr\Variable('json'),
+                                    'getAsInt',
+                                    [
+                                        new String_($property->name())
+                                    ]
+                                )
+                            ]
+                        )
+                    );
+                } else {
+                    $arguments[] = new Arg(
+                        new Expr\StaticCall(
+                            new Name($property->type()), $this->constructorNameOf($property->type()),
+                            [
+                                $this->builderFactory->methodCall(
+                                    new Expr\Variable('json'),
+                                    'getAsString',
+                                    [
+                                        new String_($property->name())
+                                    ]
+                                )
+                            ]
+                        )
+                    );
+                }
             } else {
                 if ($property->isEnum()) {
                     $arguments[] = new Arg(
@@ -554,18 +573,32 @@ final class EventGenerator
 
         foreach ($properties as $property) {
             if ($property->isValueObject()) {
-                $values[] = new ArrayItem(
-                    $this->builderFactory->methodCall(
-                        new PropertyFetch(new Variable('this'), $property->name()),
-                        'asString'
-                    ),
-                    new String_($property->name())
-                );
+                $rc = new ReflectionClass($property->type());
+                $rm = $rc->getMethod($this->constructorNameOf($property->type()));
+                $rp = $rm->getParameters()[0];
+                if ($rp->getType()->getName() === 'int') {
+                    $values[] = new ArrayItem(
+                        $this->builderFactory->methodCall(
+                            new PropertyFetch(new Variable('this'), $property->name()),
+                            'asInt'
+                        ),
+                        new String_($property->name())
+                    );
+                } else {
+                    $values[] = new ArrayItem(
+                        $this->builderFactory->methodCall(
+                            new PropertyFetch(new Variable('this'), $property->name()),
+                            'asString'
+                        ),
+                        new String_($property->name())
+                    );
+                }
             } else {
                 if ($property->isEnum()) {
                     $values[] = new ArrayItem(
                         $this->builderFactory->propertyFetch(
-                            new PropertyFetch(new Variable('this'), $property->name()), 'value'
+                            new PropertyFetch(new Variable('this'), $property->name()),
+                            'value'
                         ),
                         new String_($property->name())
                     );
@@ -607,8 +640,8 @@ final class EventGenerator
     }
 
     private function getters(
-        Class_ $event,
-        array $properties,
+        Class_         $event,
+        array          $properties,
         ?string        $classToUseAsCorrelationId,
         ?CorrelationId $fixedCorrelationId
     ): void

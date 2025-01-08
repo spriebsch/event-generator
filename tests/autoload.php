@@ -12,6 +12,7 @@ spl_autoload_register(
                 'spriebsch\\eventstore\\generator\\testcorrelationid' => '/stubs/TestCorrelationId.php',
                 'spriebsch\\eventstore\\generator\\testenum' => '/stubs/TestEnum.php',
                 'spriebsch\\eventstore\\generator\\testfixedcorrelationid' => '/stubs/TestFixedCorrelationId.php',
+                'spriebsch\\eventstore\\generator\\testintegervalueobject' => '/stubs/TestIntegerValueObject.php',
                 'spriebsch\\eventstore\\generator\\testmappedcorrelationid' => '/stubs/TestMappedCorrelationId.php',
                 'spriebsch\\eventstore\\generator\\testvalueobject' => '/stubs/TestValueObject.php',
                 'spriebsch\\eventstore\\generator\\testvalueobjectwithnamedconstructor' => '/stubs/TestValueObjectWithNamedConstructor.php',
