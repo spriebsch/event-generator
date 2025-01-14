@@ -16,9 +16,13 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\PrettyPrinter\Standard;
@@ -244,7 +248,18 @@ final class EventGenerator
 
         foreach ($properties as $property) {
             $parameter = $this->builderFactory->param($property->name());
-            $parameter->setType($property->type());
+
+            if ($property->isNullable()) {
+                if ($property->isValueObject()) {
+                    $type = new NullableType(new Name($property->type()));
+                } else {
+                    $type = new NullableType(new Identifier($property->type()));
+                }
+            } else {
+                $type = $property->type();
+            }
+
+            $parameter->setType($type);
             $method->addParam($parameter);
         }
     }
@@ -252,21 +267,21 @@ final class EventGenerator
     private function constructorBody(Method $method, ?CorrelationId $correlationId, array $properties): void
     {
         $method->addStmt(
-            new Expr\Assign(
+            new Assign(
                 new PropertyFetch(new Variable('this'), 'id'),
                 new Variable('id')
             )
         );
 
         $method->addStmt(
-            new Expr\Assign(
+            new Assign(
                 new PropertyFetch(new Variable('this'), 'correlationId'),
                 new Variable('correlationId')
             )
         );
 
         $method->addStmt(
-            new Expr\Assign(
+            new Assign(
                 new PropertyFetch(new Variable('this'), 'timestamp'),
                 new Variable('timestamp')
             )
@@ -274,7 +289,7 @@ final class EventGenerator
 
         foreach ($properties as $property) {
             $method->addStmt(
-                new Expr\Assign(
+                new Assign(
                     new PropertyFetch(new Variable('this'), $property->name()),
                     new Variable($property->name())
                 )
@@ -352,7 +367,18 @@ final class EventGenerator
     {
         foreach ($properties as $property) {
             $parameter = $this->builderFactory->param($property->name());
-            $parameter->setType($property->type());
+
+            if ($property->isNullable()) {
+                if ($property->isValueObject()) {
+                    $type = new NullableType(new Name($property->type()));
+                } else {
+                    $type = new NullableType(new Identifier($property->type()));
+                }
+            } else {
+                $type = $property->type();
+            }
+
+            $parameter->setType($type);
             $method->addParam($parameter);
         }
     }
@@ -370,16 +396,6 @@ final class EventGenerator
                 new Expr\StaticCall(new Name('\\' . EventId::class), 'generate')
             )
         ];
-
-        // Correlation ID
-        /*
-        if ($useAsCorrelationId !== null) {
-            $arguments[] = $this->builderFactory->methodCall(
-                new Variable($this->variableNameForCorrelationId($useAsCorrelationId)),
-                'asUUID'
-            );
-        }
-        */
 
         // Domain ID
         if ($useAsCorrelationId !== null) {
@@ -495,40 +511,46 @@ final class EventGenerator
 
         foreach ($properties as $property) {
             if ($property->isValueObject()) {
+
                 $rc = new ReflectionClass($property->type());
                 $rm = $rc->getMethod($this->constructorNameOf($property->type()));
                 $rp = $rm->getParameters()[0];
+
                 if ($rp->getType()->getName() === 'int') {
-                    $arguments[] = new Arg(
-                        new Expr\StaticCall(
-                            new Name($property->type()), $this->constructorNameOf($property->type()),
-                            [
-                                $this->builderFactory->methodCall(
-                                    new Expr\Variable('json'),
-                                    'getAsInt',
-                                    [
-                                        new String_($property->name())
-                                    ]
-                                )
-                            ]
-                        )
+                    $methodName = 'getAsInt';
+                } else {
+                    $methodName = 'getAsString';
+                }
+
+                $getCall = $this->builderFactory->methodCall(
+                    new Expr\Variable('json'),
+                    $methodName,
+                    [
+                        new String_($property->name())
+                    ]
+                );
+
+                if ($property->isNullable()) {
+                    $methodCall = $this->builderFactory->staticCall(
+                        'self',
+                        'create',
+                        [
+                            new String_($property->type()),
+                            $getCall
+                        ]
                     );
+
+                    $arguments[] = new Arg($methodCall);
+
                 } else {
                     $arguments[] = new Arg(
                         new Expr\StaticCall(
                             new Name($property->type()), $this->constructorNameOf($property->type()),
-                            [
-                                $this->builderFactory->methodCall(
-                                    new Expr\Variable('json'),
-                                    'getAsString',
-                                    [
-                                        new String_($property->name())
-                                    ]
-                                )
-                            ]
+                            [$getCall]
                         )
                     );
                 }
+
             } else {
                 if ($property->isEnum()) {
                     $arguments[] = new Arg(
@@ -586,7 +608,7 @@ final class EventGenerator
                     );
                 } else {
                     $values[] = new ArrayItem(
-                        $this->builderFactory->methodCall(
+                        new NullsafeMethodCall(
                             new PropertyFetch(new Variable('this'), $property->name()),
                             'asString'
                         ),
@@ -632,7 +654,18 @@ final class EventGenerator
         foreach ($properties as $property) {
             $classProperty = new \PhpParser\Builder\Property($property->name());
             $classProperty->makePrivate();
-            $classProperty->setType($property->type());
+
+            if ($property->isNullable()) {
+                if ($property->isValueObject()) {
+                    $type = new NullableType(new Name($property->type()));
+                } else {
+                    $type = new NullableType(new Identifier($property->type()));
+                }
+            } else {
+                $type = $property->type();
+            }
+
+            $classProperty->setType($type);
             $classProperty->makeReadonly();
 
             $event->addStmt($classProperty);
@@ -664,7 +697,14 @@ final class EventGenerator
 
         foreach ($properties as $property) {
             $method = $this->builderFactory->method($property->name());
-            $method->setReturnType($property->type());
+
+            $returnType = $property->type();
+
+            if ($property->isNullable()) {
+                $returnType = '?' . $returnType;
+            }
+
+            $method->setReturnType($returnType);
             $method->makePublic();
 
             $method->addStmt(

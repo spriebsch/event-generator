@@ -66,16 +66,16 @@
         },
         {
             "name": "spriebsch/eventstore",
-            "version": "1.8.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spriebsch/eventstore.git",
-                "reference": "ee04d3c3d657c300d417497332b7a6bf7b2f480e"
+                "reference": "e8469a80b32af0f5ea2abb1046cbf628af127f4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spriebsch/eventstore/zipball/ee04d3c3d657c300d417497332b7a6bf7b2f480e",
-                "reference": "ee04d3c3d657c300d417497332b7a6bf7b2f480e",
+                "url": "https://api.github.com/repos/spriebsch/eventstore/zipball/e8469a80b32af0f5ea2abb1046cbf628af127f4b",
+                "reference": "e8469a80b32af0f5ea2abb1046cbf628af127f4b",
                 "shasum": ""
             },
             "require": {
@@ -109,9 +109,9 @@
             "description": "Lightweight Sqlite-based Event Store.",
             "support": {
                 "issues": "https://github.com/spriebsch/eventstore/issues",
-                "source": "https://github.com/spriebsch/eventstore/tree/1.8.0"
+                "source": "https://github.com/spriebsch/eventstore/tree/1.9.1"
             },
-            "time": "2025-01-08T08:09:17+00:00"
+            "time": "2025-01-14T12:30:04+00:00"
         },
         {
             "name": "spriebsch/filesystem",

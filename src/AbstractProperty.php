@@ -13,6 +13,7 @@ namespace spriebsch\eventstore\generator;
 abstract class AbstractProperty implements Property
 {
     private string $name;
+    private bool $isNullable = false;
 
     public static function withName(string $name): static
     {
@@ -29,6 +30,13 @@ abstract class AbstractProperty implements Property
         return $this->name;
     }
 
+    public function nullable(): self
+    {
+        $this->isNullable = true;
+
+        return $this;
+    }
+
     public function isValueObject(): bool
     {
         return false;
@@ -37,5 +45,10 @@ abstract class AbstractProperty implements Property
     public function isEnum(): bool
     {
         return false;
+    }
+
+    public function isNullable(): bool
+    {
+        return $this->isNullable;
     }
 }

@@ -312,6 +312,44 @@ class EventGeneratorTest extends TestCase
     }
 
     #[Group('feature')]
+    public function test_generates_event_with_nullable_value_object_property(): void
+    {
+        $targetDirectory = new FakeDirectory('the-target-directory');
+        $namespace = 'spriebsch\\eventgenerator\\tests\\' . __FUNCTION__;
+        $class = $namespace . '\\TestEvent';
+
+        $eventGenerator = new EventGenerator($targetDirectory, $namespace, []);
+
+        $eventGenerator->generateEvent(
+            'the-topic',
+            'TestEvent',
+            [
+                ValueObjectProperty::withName('theProperty')->withClass(TestValueObject::class)->nullable()
+            ],
+            TestMappedCorrelationId::class,
+            null
+        );
+
+        $code = $targetDirectory->allFiles()[0]->load();
+
+        // file_put_contents('hugo.php', $code);die;
+        // print $code; die;
+
+        eval(substr($code, strlen('<?php')));
+
+        $event = $class::from(
+            TestMappedCorrelationId::generate(),
+            null
+        );
+
+        // var_dump($event);die;
+
+        $this->assertEventWorksAsExpected($event);
+
+        $this->assertNull($event->theProperty());
+    }
+
+    #[Group('feature')]
     public function test_generates_event_with_int_value_object_property(): void
     {
         $targetDirectory = new FakeDirectory('the-target-directory');
