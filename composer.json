@@ -20,14 +20,14 @@
   ],
   "config": {
     "platform": {
-      "php": "8.3"
+      "php": "8.4"
     },
     "optimize-autoloader": true,
     "sort-packages": true
   },
   "prefer-stable": true,
   "require": {
-    "php": "^8.3",
+    "php": "^8.4",
     "ext-sqlite3": "*",
     "nikic/php-parser": "^5.0",
     "spriebsch/eventstore": "^1.0",
