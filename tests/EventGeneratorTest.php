@@ -629,7 +629,7 @@ class EventGeneratorTest extends TestCase
         $code = $targetDirectory->allFiles()[0]->load();
 
         eval(substr($code, strlen('<?php')));
-
+        
         $event = $class::from(
             TestMappedCorrelationId::generate(),
             $value
