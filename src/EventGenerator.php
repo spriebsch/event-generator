@@ -38,10 +38,10 @@ use spriebsch\timestamp\Timestamp;
 
 final class EventGenerator
 {
-    private string         $namespace;
-    private Directory      $targetDirectory;
+    private string $namespace;
+    private Directory $targetDirectory;
     private BuilderFactory $builderFactory;
-    private array          $nonDefaultConstructors;
+    private array $nonDefaultConstructors;
 
     public function __construct(Directory $targetDirectory, string $namespace, array $nonDefaultConstructors)
     {
@@ -514,43 +514,74 @@ final class EventGenerator
 
                 $rc = new ReflectionClass($property->type());
                 $rm = $rc->getMethod($this->constructorNameOf($property->type()));
-                $rp = $rm->getParameters()[0];
 
-                if ($rp->getType()->getName() === 'int') {
-                    $methodName = 'getAsInt';
-                } else {
-                    $methodName = 'getAsString';
-                }
+                if ($rm->getNumberOfParameters() > 1) {
 
-                $getCall = $this->builderFactory->methodCall(
-                    new Expr\Variable('json'),
-                    $methodName,
-                    [
-                        new String_($property->name())
-                    ]
-                );
+                    $getCalls = [];
 
-                if ($property->isNullable()) {
-                    $methodCall = $this->builderFactory->staticCall(
-                        'self',
-                        'create',
-                        [
-                            new String_($property->type()),
-                            $getCall
-                        ]
-                    );
+                    foreach ($rm->getParameters() as $rp) {
+                        if ($rp->getType()->getName() === 'int') {
+                            $methodName = 'getAsInt';
+                        } else {
+                            $methodName = 'getAsString';
+                        }
 
-                    $arguments[] = new Arg($methodCall);
+                        $getCall = $this->builderFactory->methodCall(
+                            new Expr\Variable('json'),
+                            $methodName,
+                            [
+                                new String_($property->name() . '.' . $rp->getName())
+                            ]
+                        );
 
-                } else {
+                        $getCalls[] = $getCall;
+                    }
+
                     $arguments[] = new Arg(
                         new Expr\StaticCall(
                             new Name($property->type()), $this->constructorNameOf($property->type()),
-                            [$getCall]
+                            $getCalls
                         )
                     );
-                }
 
+                } else {
+                    $rp = $rm->getParameters()[0];
+
+                    if ($rp->getType()->getName() === 'int') {
+                        $methodName = 'getAsInt';
+                    } else {
+                        $methodName = 'getAsString';
+                    }
+
+                    $getCall = $this->builderFactory->methodCall(
+                        new Expr\Variable('json'),
+                        $methodName,
+                        [
+                            new String_($property->name())
+                        ]
+                    );
+
+                    if ($property->isNullable()) {
+                        $methodCall = $this->builderFactory->staticCall(
+                            'self',
+                            'create',
+                            [
+                                new String_($property->type()),
+                                $getCall
+                            ]
+                        );
+
+                        $arguments[] = new Arg($methodCall);
+
+                    } else {
+                        $arguments[] = new Arg(
+                            new Expr\StaticCall(
+                                new Name($property->type()), $this->constructorNameOf($property->type()),
+                                [$getCall]
+                            )
+                        );
+                    }
+                }
             } else {
                 if ($property->isEnum()) {
                     $arguments[] = new Arg(
@@ -597,23 +628,47 @@ final class EventGenerator
             if ($property->isValueObject()) {
                 $rc = new ReflectionClass($property->type());
                 $rm = $rc->getMethod($this->constructorNameOf($property->type()));
-                $rp = $rm->getParameters()[0];
-                if ($rp->getType()->getName() === 'int') {
+
+                if ($rm->getNumberOfParameters() > 1) {
+                    $i = 0;
+                    $listValues = [];
+                    foreach ($rm->getParameters() as $rp) {
+                        $listValues[] = new ArrayItem(
+                            new NullsafeMethodCall(
+                                new PropertyFetch(
+                                    new Variable('this'),
+                                    $property->name()
+                                ),
+                                $property->methods()[$i]
+                            ),
+                            new String_($rp->getName())
+                        );
+                        $i++;
+                    }
                     $values[] = new ArrayItem(
-                        $this->builderFactory->methodCall(
-                            new PropertyFetch(new Variable('this'), $property->name()),
-                            'asInt'
-                        ),
+                        new Expr\Array_($listValues),
                         new String_($property->name())
                     );
                 } else {
-                    $values[] = new ArrayItem(
-                        new NullsafeMethodCall(
-                            new PropertyFetch(new Variable('this'), $property->name()),
-                            'asString'
-                        ),
-                        new String_($property->name())
-                    );
+                    $rp = $rm->getParameters()[0];
+
+                    if ($rp->getType()->getName() === 'int') {
+                        $values[] = new ArrayItem(
+                            $this->builderFactory->methodCall(
+                                new PropertyFetch(new Variable('this'), $property->name()),
+                                'asInt'
+                            ),
+                            new String_($property->name())
+                        );
+                    } else {
+                        $values[] = new ArrayItem(
+                            new NullsafeMethodCall(
+                                new PropertyFetch(new Variable('this'), $property->name()),
+                                'asString'
+                            ),
+                            new String_($property->name())
+                        );
+                    }
                 }
             } else {
                 if ($property->isEnum()) {

@@ -21,7 +21,6 @@ use spriebsch\uuid\UUID;
 #[CoversClass(EnumProperty::class)]
 #[CoversClass(ArrayProperty::class)]
 #[CoversClass(BoolProperty::class)]
-#[CoversClass(Specification::class)]
 #[CoversClass(FloatProperty::class)]
 #[CoversClass(StringProperty::class)]
 #[CoversClass(IntegerProperty::class)]
@@ -601,5 +600,43 @@ class EventGeneratorTest extends TestCase
         $recreated = $class::fromJson(Json::from($json));
 
         $this->assertEquals($event, $recreated);
+    }
+
+
+    #[Group('feature')]
+    public function test_value_object_with_two_parameters(): void
+    {
+        $targetDirectory = new FakeDirectory('the-target-directory');
+        $namespace = 'spriebsch\\eventgenerator\\tests\\' . __FUNCTION__;
+        $class = $namespace . '\\TestEvent';
+
+        $value = TestValueObjectWithTwoParameters::from('the-value', 42);
+
+        $eventGenerator = new EventGenerator($targetDirectory, $namespace, []);
+
+        $eventGenerator->generateEvent(
+            'the-topic',
+            'TestEvent',
+            [
+                ValueObjectProperty::withName('theProperty')
+                                   ->withClass(TestValueObjectWithTwoParameters::class)
+                                   ->withMethods('string', 'int')
+            ],
+            TestMappedCorrelationId::class,
+            null
+        );
+
+        $code = $targetDirectory->allFiles()[0]->load();
+
+        eval(substr($code, strlen('<?php')));
+
+        $event = $class::from(
+            TestMappedCorrelationId::generate(),
+            $value
+        );
+
+        $this->assertEventWorksAsExpected($event);
+        $this->assertSame($value->string(), $event->theProperty()->string());
+        $this->assertSame($value->int(), $event->theProperty()->int());
     }
 }

@@ -19,6 +19,7 @@ spl_autoload_register(
                 'spriebsch\\eventstore\\generator\\testvalueobjectwithnonpublicnamedconstructor' => '/stubs/TestValueObjectWithNonPublicNamedConstructor.php',
                 'spriebsch\\eventstore\\generator\\testvalueobjectwithnonstaticnamedconstructor' => '/stubs/TestValueObjectWithNonStaticNamedConstructor.php',
                 'spriebsch\\eventstore\\generator\\testvalueobjectwithparameterlessnamedconstructor' => '/stubs/TestValueObjectWithParameterlessNamedConstructor.php',
+                'spriebsch\\eventstore\\generator\\testvalueobjectwithtwoparameters' => '/stubs/TestValueObjectWithTwoParameters.php',
                 'spriebsch\\eventstore\\generator\\valueobjectpropertytest' => '/ValueObjectPropertyTest.php'
             );
         }
